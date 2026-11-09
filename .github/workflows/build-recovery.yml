@@ -231,3 +231,17 @@ jobs:
                 "> [!TIP]" \
                 "> Enable [Cloudflare WARP](https://one.one.one.one/) for faster download from GitHub artifact."
           fi
+                - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_REMOTE_ROOT }}/
+          dry-run: false
+          # 只上传这个zip文件
+          glob: ${{ steps.compress_iso.outputs.compressed_file }}
+          # 覆盖旧文件
+          delete: false
+
